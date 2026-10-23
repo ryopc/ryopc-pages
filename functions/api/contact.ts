@@ -1,5 +1,19 @@
 import { TurnstileResponse, ContactFormData } from '../../src/lib/turnstile';
 
+const corsHeaders = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Methods': 'POST, OPTIONS',
+  'Access-Control-Allow-Headers': 'Content-Type',
+  'Content-Type': 'application/json',
+};
+
+export const onRequestOptions: PagesFunction = async () => {
+  return new Response(null, {
+    status: 204,
+    headers: corsHeaders,
+  });
+};
+
 export const onRequestPost: PagesFunction<{ TURNSTILE_SECRET: string }> = async (context) => {
   const { request, env, waitUntil } = context;
 
@@ -24,7 +38,7 @@ export const onRequestPost: PagesFunction<{ TURNSTILE_SECRET: string }> = async 
     } else {
       return new Response(JSON.stringify({ success: false, error: 'Unsupported content type' }), {
         status: 400,
-        headers: { 'Content-Type': 'application/json' },
+        headers: corsHeaders,
       });
     }
 
@@ -32,7 +46,7 @@ export const onRequestPost: PagesFunction<{ TURNSTILE_SECRET: string }> = async 
     if (!formData.name || !formData.email || !formData.message) {
       return new Response(JSON.stringify({ success: false, error: 'Missing required fields' }), {
         status: 400,
-        headers: { 'Content-Type': 'application/json' },
+        headers: corsHeaders,
       });
     }
 
@@ -40,7 +54,7 @@ export const onRequestPost: PagesFunction<{ TURNSTILE_SECRET: string }> = async 
     if (!turnstileToken) {
       return new Response(JSON.stringify({ success: false, error: 'Turnstile token missing' }), {
         status: 403,
-        headers: { 'Content-Type': 'application/json' },
+        headers: corsHeaders,
       });
     }
 
@@ -51,7 +65,7 @@ export const onRequestPost: PagesFunction<{ TURNSTILE_SECRET: string }> = async 
     if (!verifyResult.success) {
       return new Response(JSON.stringify({ success: false, error: 'Turnstile verification failed' }), {
         status: 403,
-        headers: { 'Content-Type': 'application/json' },
+        headers: corsHeaders,
       });
     }
 
@@ -74,19 +88,19 @@ export const onRequestPost: PagesFunction<{ TURNSTILE_SECRET: string }> = async 
       console.error('formsubmit.co error:', formsubmitResponse.status);
       return new Response(JSON.stringify({ success: false, error: 'Failed to submit form' }), {
         status: 502,
-        headers: { 'Content-Type': 'application/json' },
+        headers: corsHeaders,
       });
     }
 
     return new Response(JSON.stringify({ success: true }), {
       status: 200,
-      headers: { 'Content-Type': 'application/json' },
+      headers: corsHeaders,
     });
   } catch (error) {
     console.error('Contact form error:', error);
     return new Response(JSON.stringify({ success: false, error: 'Internal server error' }), {
       status: 500,
-      headers: { 'Content-Type': 'application/json' },
+      headers: corsHeaders,
     });
   }
 };
