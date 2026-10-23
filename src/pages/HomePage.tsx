@@ -1,4 +1,4 @@
-import { ArrowRight, Check, Code2, LayoutTemplate, Palette, Smartphone, Sparkles } from 'lucide-react';
+import { ArrowRight, Check, Code2, LayoutTemplate, Palette, Smartphone } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import ProjectCard from '../components/ProjectCard';
 import SectionHeading from '../components/SectionHeading';
