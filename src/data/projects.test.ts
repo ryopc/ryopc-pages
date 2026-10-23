@@ -2,8 +2,8 @@ import { describe, expect, it } from 'vitest';
 import { findProject, projects } from './projects';
 
 describe('project catalogue', () => {
-  it('contains at least four portfolio entries', () => {
-    expect(projects.length).toBeGreaterThanOrEqual(4);
+  it('contains at least three portfolio entries', () => {
+    expect(projects.length).toBeGreaterThanOrEqual(3);
   });
 
   it('has unique IDs for every project', () => {
@@ -12,11 +12,15 @@ describe('project catalogue', () => {
   });
 
   it('finds an existing project and returns undefined for an unknown ID', () => {
-    expect(findProject('service-site')?.title).toBe('サービス紹介サイト');
+    expect(findProject('ryopc-site')?.title).toBe('ryopc org公式サイト');
     expect(findProject('not-a-real-project')).toBeUndefined();
   });
 
   it('has consistent data model with required fields', () => {
     expect(projects.every((project) => project.features.length > 0 && project.summary.length > 0)).toBe(true);
+  });
+
+  it('has image field for each project', () => {
+    expect(projects.every((project) => project.image && project.image.startsWith('/images/projects/'))).toBe(true);
   });
 });

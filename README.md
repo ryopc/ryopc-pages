@@ -77,5 +77,6 @@ type Project = {
   tone: 'blue' | 'lavender' | 'mint' | 'peach'; // 見た目の色分け
   label: string;        // カード右上のラベル
   features: string[];   // 詳細ページのポイント一覧
+  image?: string;       // 制作実績画像のパス (例: '/images/projects/ryopc-site.png')
 };
 ```

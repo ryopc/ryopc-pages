@@ -7,6 +7,7 @@ export type Project = {
   tone: 'blue' | 'lavender' | 'mint' | 'peach';
   label: string;
   features: string[];
+  image?: string; // Optional: path to project image (e.g., '/images/projects/service-site.png')
 };
 
 // Production projects data. Replace this array with actual portfolio entries.
@@ -21,6 +22,7 @@ export const projects: Project[] = [
     tone: 'blue',
     label: 'PROJECT',
     features: ['サービスの特徴を整理した情報設計', '利用方法をわかりやすく伝えるコンテンツ構成', 'サービスの魅力を引き出すビジュアルデザイン'],
+    image: '/images/projects/ryopc-site.png',
   },
   {
     id: 'koshi-docs',
@@ -31,6 +33,7 @@ export const projects: Project[] = [
     tone: 'lavender',
     label: 'DOCUMENTATION',
     features: ['利用者が必要な情報をすぐに見つけられる情報設計', 'わかりやすいコンテンツ構成', '更新しやすいドキュメント構成'],
+    image: '/images/projects/koshi-docs.png',
   },
   {
     id: 'game_ryo-site',
@@ -41,6 +44,7 @@ export const projects: Project[] = [
     tone: 'mint',
     label: 'PORTFOLIO',
     features: ['個人の活動や作品を紹介する情報設計', '魅力的なビジュアルデザイン', 'ユーザーが使いやすいナビゲーション'],
+    image: '/images/projects/game_ryo-site.png',
   }
 ];
 

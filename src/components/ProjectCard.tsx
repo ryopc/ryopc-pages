@@ -3,6 +3,9 @@ import { Link } from 'react-router-dom';
 import type { Project } from '../data/projects';
 
 const iconById = {
+  'ryopc-site': LayoutTemplate,
+  'koshi-docs': Compass,
+  'game_ryo-site': Blocks,
   'service-site': LayoutTemplate,
   'project-landing': Compass,
   'community-hub': Blocks,
@@ -11,6 +14,20 @@ const iconById = {
 
 export function ProjectVisual({ project }: { project: Project }) {
   const Icon = iconById[project.id as keyof typeof iconById] ?? LayoutTemplate;
+  
+  if (project.image) {
+    return (
+      <div className={`project-visual project-visual--${project.tone}`} aria-hidden="true">
+        <img 
+          src={project.image} 
+          alt={`${project.title} のスクリーンショット`}
+          className="project-image"
+          loading="lazy"
+        />
+      </div>
+    );
+  }
+
   return (
     <div className={`project-visual project-visual--${project.tone}`} aria-hidden="true">
       <div className="preview-window">
