@@ -1,6 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="800" height="500" viewBox="0 0 800 500">
-  <rect fill="#f1f1fc" width="800" height="500"/>
-  <text x="400" y="230" font-family="system-ui, sans-serif" font-size="28" font-weight="600" fill="#8b85d6" text-anchor="middle">koshi 公式ドキュメント</text>
-  <text x="400" y="270" font-family="system-ui, sans-serif" font-size="16" fill="#68778d" text-anchor="middle">画像を追加してください</text>
-  <rect x="300" y="310" width="200" height="3" rx="1.5" fill="#8b85d6"/>
-</svg>
