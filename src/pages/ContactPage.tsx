@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from 'react';
+import { useState, type FormEvent, useRef, useEffect } from 'react';
 import { ArrowLeft, ArrowRight, Check, Mail, Loader2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { emptyContactForm, validateContactForm, type ContactErrors, type ContactFormData } from '../lib/contact';
@@ -13,6 +13,29 @@ export default function ContactPage() {
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [turnstileError, setTurnstileError] = useState<string | null>(null);
+  const turnstileContainerRef = useRef<HTMLDivElement>(null);
+  const widgetIdRef = useRef<number | null>(null);
+
+  // Render Turnstile widget explicitly when confirmation screen is shown
+  useEffect(() => {
+    if (confirming && !submitted && turnstileContainerRef.current && (window as any).turnstile) {
+      const container = turnstileContainerRef.current;
+      // Clear any existing widget
+      container.innerHTML = '';
+      widgetIdRef.current = (window as any).turnstile.render(container, {
+        sitekey: '0x4AAAAAAFiJ1aAmBs3sxMvX',
+        theme: 'light',
+        action: 'contact',
+      });
+    }
+    return () => {
+      // Cleanup: reset widget when leaving confirmation screen
+      if (widgetIdRef.current !== null && (window as any).turnstile) {
+        (window as any).turnstile.reset(widgetIdRef.current);
+        widgetIdRef.current = null;
+      }
+    };
+  }, [confirming, submitted]);
 
   const update = (field: keyof ContactFormData, value: string) => {
     setValues((current) => ({ ...current, [field]: value }));
@@ -35,7 +58,9 @@ export default function ContactPage() {
 
     try {
       // Get Turnstile token from the widget
-      const turnstileToken = (window as any).turnstile?.getResponse?.() || '';
+      const turnstileToken = widgetIdRef.current !== null && (window as any).turnstile
+        ? (window as any).turnstile.getResponse(widgetIdRef.current)
+        : '';
       
       if (!turnstileToken) {
         setTurnstileError('Turnstile verification required. Please complete the challenge.');
@@ -54,7 +79,9 @@ export default function ContactPage() {
       if (!response.ok || !result.success) {
         setTurnstileError(result.error || '送信に失敗しました。もう一度お試しください。');
         // Reset Turnstile widget for retry
-        (window as any).turnstile?.reset?.();
+        if (widgetIdRef.current !== null && (window as any).turnstile) {
+          (window as any).turnstile.reset(widgetIdRef.current);
+        }
         setSubmitting(false);
         return;
       }
@@ -63,7 +90,9 @@ export default function ContactPage() {
       setConfirming(false);
     } catch {
       setTurnstileError('ネットワークエラーが発生しました。もう一度お試しください。');
-      (window as any).turnstile?.reset?.();
+      if (widgetIdRef.current !== null && (window as any).turnstile) {
+        (window as any).turnstile.reset(widgetIdRef.current);
+      }
       setSubmitting(false);
     }
   };
@@ -104,13 +133,7 @@ export default function ContactPage() {
             <div className="confirmation-heading"><span><Check size={22} /></span><div><span className="kicker">REVIEW YOUR MESSAGE</span><h2 id="confirmation-title">入力内容の確認</h2></div></div>
             <p className="confirmation-description">送信前の確認画面です。内容を確認し、必要があれば前の画面へ戻って修正してください。</p>
             <dl className="confirmation-list"><dt>お名前</dt><dd>{values.name}</dd><dt>メールアドレス</dt><dd>{values.email}</dd><dt>お問い合わせ種別</dt><dd>{values.category}</dd><dt>お問い合わせ内容</dt><dd className="confirmation-message">{values.message}</dd></dl>
-            <div className="turnstile-container" style={{ marginTop: '20px' }}>
-              <div 
-                className="cf-turnstile" 
-                data-sitekey="0x4AAAAAAFiJ1aAmBs3sxMvX" 
-                data-action="contact"
-                data-theme="light"
-              ></div>
+            <div className="turnstile-container" style={{ marginTop: '20px' }} ref={turnstileContainerRef}>
               {turnstileError && <p className="field-error" style={{ marginTop: '8px', color: '#c34e5a' }}>{turnstileError}</p>}
             </div>
             <div className="confirmation-actions">
