@@ -393,3 +393,12 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
   .logo img { width: 165px; height: auto; }
   .menu-toggle { gap: 5px; padding: 7px 8px; }
 }
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
