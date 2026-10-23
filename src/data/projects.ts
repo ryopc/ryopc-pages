@@ -9,48 +9,39 @@ export type Project = {
   features: string[];
 };
 
-// These entries are illustrative concepts for the prototype, not claimed client work.
+// Production projects data. Replace this array with actual portfolio entries.
+// Each entry follows the Project type structure for easy maintenance.
 export const projects: Project[] = [
   {
-    id: 'service-site',
-    title: 'サービス紹介サイト',
+    id: 'ryopc-site',
+    title: 'ryopc org公式サイト',
     category: 'コーポレート',
-    description: 'サービスの特徴が自然に伝わる、すっきりとした情報設計。',
-    summary: '情報を整理し、初めて訪れた人にもサービスの内容が伝わるサイトの制作イメージです。',
+    description: '情報を整理し、サービスの魅力を伝えるための公式サイト。',
+    summary: 'サービスの特徴や利用方法をわかりやすく伝えるため、情報を整理した公式サイトを制作しました。',
     tone: 'blue',
-    label: 'SERVICE',
-    features: ['情報を整理したページ構成', 'スマートフォンでも読みやすいレイアウト', '問い合わせまで迷わない導線'],
-  },
-  {
-    id: 'project-landing',
-    title: 'プロジェクト紹介ページ',
-    category: 'ランディングページ',
-    description: '伝えたいメッセージを、短くわかりやすく届ける構成。',
-    summary: 'ひとつのアイデアに焦点を当て、内容と次のアクションを明快にするページの制作イメージです。',
-    tone: 'lavender',
     label: 'PROJECT',
-    features: ['目的に合わせたコンテンツ設計', '要点が伝わるビジュアル', '次の行動につながるボタン設計'],
+    features: ['サービスの特徴を整理した情報設計', '利用方法をわかりやすく伝えるコンテンツ構成', 'サービスの魅力を引き出すビジュアルデザイン'],
   },
   {
-    id: 'community-hub',
-    title: 'コミュニティサイト',
-    category: 'コミュニティ',
-    description: '情報を探しやすく、安心して使えるページづくり。',
-    summary: '利用者が必要な情報へアクセスしやすい、落ち着いた構成の制作イメージです。',
+    id: 'koshi-docs',
+    title: 'koshi公式ドキュメント',
+    category: 'ドキュメント',
+    description: '利用者が必要な情報をすぐに見つけられる、わかりやすいドキュメントサイト。',
+    summary: '利用者が必要な情報をすぐに見つけられる、わかりやすいドキュメントサイト。',
+    tone: 'lavender',
+    label: 'DOCUMENTATION',
+    features: ['利用者が必要な情報をすぐに見つけられる情報設計', 'わかりやすいコンテンツ構成', '更新しやすいドキュメント構成'],
+  },
+  {
+    id: 'game_ryo-site',
+    title: 'game_ryo個人サイト',
+    category: '個人',
+    description: '個人の活動や作品を紹介するためのポートフォリオサイト。',
+    summary: '個人の活動や作品を紹介するためのポートフォリオサイト。',
     tone: 'mint',
-    label: 'COMMUNITY',
-    features: ['見つけやすいナビゲーション', '使う人を中心にした情報設計', '更新しやすいコンテンツ構成'],
-  },
-  {
-    id: 'prototype-lab',
-    title: 'アイデアの試作',
-    category: 'プロトタイプ',
-    description: 'まず形にして試し、使いながらよりよい形へ。',
-    summary: '新しいアイデアの操作感や伝わり方を確かめるためのプロトタイプ制作イメージです。',
-    tone: 'peach',
-    label: 'EXPERIMENT',
-    features: ['アイデアを早く試せる試作', '操作感を確かめるUI', 'フィードバックを考慮した改善'],
-  },
+    label: 'PORTFOLIO',
+    features: ['個人の活動や作品を紹介する情報設計', '魅力的なビジュアルデザイン', 'ユーザーが使いやすいナビゲーション'],
+  }
 ];
 
 export function findProject(id: string | undefined): Project | undefined {

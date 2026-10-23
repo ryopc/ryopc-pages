@@ -53,7 +53,6 @@ export default function HomePage() {
         <div className="container">
           <div className="section-title-row"><SectionHeading kicker="SELECTED WORKS" title="制作実績" description="アイデアに合わせて、さまざまなWebのかたちを考えます。" /><Link className="text-link" to="/works">すべての実績を見る <ArrowRight size={16} /></Link></div>
           <div className="project-grid">{projects.map((project) => <ProjectCard key={project.id} project={project} />)}</div>
-          <p className="sample-note">※ 掲載内容は、サイトの完成イメージを確認するためのサンプルです。</p>
         </div>
       </section>
 

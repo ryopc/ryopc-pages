@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { findProject, projects } from './projects';
 
 describe('project catalogue', () => {
-  it('contains at least four sample concepts', () => {
+  it('contains at least four portfolio entries', () => {
     expect(projects.length).toBeGreaterThanOrEqual(4);
   });
 
@@ -16,7 +16,7 @@ describe('project catalogue', () => {
     expect(findProject('not-a-real-project')).toBeUndefined();
   });
 
-  it('marks example content as a concept through a consistent data model', () => {
+  it('has consistent data model with required fields', () => {
     expect(projects.every((project) => project.features.length > 0 && project.summary.length > 0)).toBe(true);
   });
 });

@@ -2,7 +2,7 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 
 export default defineConfig({
-  // Relative asset paths let this site run at a GitHub Pages project URL.
-  base: './',
+  // Root path for custom domain or Cloudflare Pages.
+  base: '/',
   plugins: [react()],
 });
