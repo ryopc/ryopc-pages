@@ -77,8 +77,8 @@ export const onRequestPost: PagesFunction<{ TURNSTILE_SECRET: string; RESEND_API
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        from: 'ryopc pages <info@ryopc.org>',
-        to: ['info@ryopc.org'],
+        from: 'ryopc pages <pages@mail.ryopc.org>',
+        to: ['pages@mail.ryopc.org'],
         subject: '【ryopc pages】お問い合わせ',
         html: `
           <h2>新しいお問い合わせ</h2>
