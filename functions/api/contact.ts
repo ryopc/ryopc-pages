@@ -78,8 +78,8 @@ export const onRequestPost: PagesFunction<{ TURNSTILE_SECRET: string; BREVO_API_
         'Accept': 'application/json',
       },
       body: JSON.stringify({
-        sender: { name: 'ryopc pages', email: 'info@ryopc.org' },
-        to: [{ email: 'info@ryopc.org', name: 'ryopc pages' }],
+        sender: { name: 'ryopc pages', email: 'info@mail.ryopc.org' },
+        to: [{ email: 'info@mail.ryopc.org', name: 'ryopc pages' }],
         subject: '【ryopc pages】お問い合わせ',
         htmlContent: `
           <h2>新しいお問い合わせ</h2>
