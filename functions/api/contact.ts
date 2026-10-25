@@ -14,7 +14,7 @@ export const onRequestOptions: PagesFunction = async () => {
   });
 };
 
-export const onRequestPost: PagesFunction<{ TURNSTILE_SECRET: string }> = async (context) => {
+export const onRequestPost: PagesFunction<{ TURNSTILE_SECRET: string; BREVO_API_KEY: string }> = async (context) => {
   const { request, env, waitUntil } = context;
 
   try {
@@ -69,15 +69,50 @@ export const onRequestPost: PagesFunction<{ TURNSTILE_SECRET: string }> = async 
       });
     }
 
-    // Turnstile verification passed - form data is valid
-    // In production, you would store to KV/D1 or forward to your preferred service
-    console.log('Contact form submission:', {
-      name: formData.name,
-      email: formData.email,
-      category: formData.category,
-      message: formData.message,
-      timestamp: new Date().toISOString(),
+    // Send email via Brevo (formerly Sendinblue)
+    const emailResponse = await fetch('https://api.brevo.com/v3/smtp/email', {
+      method: 'POST',
+      headers: {
+        'api-key': env.BREVO_API_KEY,
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+      body: JSON.stringify({
+        sender: { name: 'ryopc pages', email: 'info@ryopc.org' },
+        to: [{ email: 'info@ryopc.org', name: 'ryopc pages' }],
+        subject: '【ryopc pages】お問い合わせ',
+        htmlContent: `
+          <h2>新しいお問い合わせ</h2>
+          <table style="border-collapse: collapse; width: 100%; max-width: 600px;">
+            <tr><td style="padding: 8px; border: 1px solid #ddd; font-weight: bold;">お名前</td><td style="padding: 8px; border: 1px solid #ddd;">${formData.name}</td></tr>
+            <tr><td style="padding: 8px; border: 1px solid #ddd; font-weight: bold;">メールアドレス</td><td style="padding: 8px; border: 1px solid #ddd;">${formData.email}</td></tr>
+            <tr><td style="padding: 8px; border: 1px solid #ddd; font-weight: bold;">お問い合わせ種別</td><td style="padding: 8px; border: 1px solid #ddd;">${formData.category}</td></tr>
+            <tr><td style="padding: 8px; border: 1px solid #ddd; font-weight: bold;">お問い合わせ内容</td><td style="padding: 8px; border: 1px solid #ddd; white-space: pre-wrap;">${formData.message}</td></tr>
+          </table>
+          <p style="margin-top: 16px; color: #666; font-size: 12px;">このメールは ryopc pages のお問い合わせフォームから送信されました。</p>
+        `,
+        textContent: `
+新しいお問い合わせ
+
+お名前: ${formData.name}
+メールアドレス: ${formData.email}
+お問い合わせ種別: ${formData.category}
+お問い合わせ内容: ${formData.message}
+
+---
+このメールは ryopc pages のお問い合わせフォームから送信されました。
+        `,
+      }),
     });
+
+    if (!emailResponse.ok) {
+      const errorText = await emailResponse.text();
+      console.error('Brevo error:', emailResponse.status, errorText);
+      return new Response(JSON.stringify({ success: false, error: 'Failed to send email' }), {
+        status: 502,
+        headers: corsHeaders,
+      });
+    }
 
     return new Response(JSON.stringify({ 
       success: true, 
