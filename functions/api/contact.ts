@@ -14,7 +14,7 @@ export const onRequestOptions: PagesFunction = async () => {
   });
 };
 
-export const onRequestPost: PagesFunction<{ TURNSTILE_SECRET: string; BREVO_API_KEY: string }> = async (context) => {
+export const onRequestPost: PagesFunction<{ TURNSTILE_SECRET: string; RESEND_API_KEY: string }> = async (context) => {
   const { request, env, waitUntil } = context;
 
   try {
@@ -69,19 +69,18 @@ export const onRequestPost: PagesFunction<{ TURNSTILE_SECRET: string; BREVO_API_
       });
     }
 
-    // Send email via Brevo (formerly Sendinblue)
-    const emailResponse = await fetch('https://api.brevo.com/v3/smtp/email', {
+    // Send email via Resend
+    const emailResponse = await fetch('https://api.resend.com/emails', {
       method: 'POST',
       headers: {
-        'api-key': env.BREVO_API_KEY,
+        'Authorization': `Bearer ${env.RESEND_API_KEY}`,
         'Content-Type': 'application/json',
-        'Accept': 'application/json',
       },
       body: JSON.stringify({
-        sender: { name: 'ryopc pages', email: 'info@mail.ryopc.org' },
-        to: [{ email: 'info@mail.ryopc.org', name: 'ryopc pages' }],
+        from: 'ryopc pages <info@ryopc.org>',
+        to: ['info@ryopc.org'],
         subject: '【ryopc pages】お問い合わせ',
-        htmlContent: `
+        html: `
           <h2>新しいお問い合わせ</h2>
           <table style="border-collapse: collapse; width: 100%; max-width: 600px;">
             <tr><td style="padding: 8px; border: 1px solid #ddd; font-weight: bold;">お名前</td><td style="padding: 8px; border: 1px solid #ddd;">${formData.name}</td></tr>
@@ -91,7 +90,7 @@ export const onRequestPost: PagesFunction<{ TURNSTILE_SECRET: string; BREVO_API_
           </table>
           <p style="margin-top: 16px; color: #666; font-size: 12px;">このメールは ryopc pages のお問い合わせフォームから送信されました。</p>
         `,
-        textContent: `
+        text: `
 新しいお問い合わせ
 
 お名前: ${formData.name}
@@ -107,7 +106,7 @@ export const onRequestPost: PagesFunction<{ TURNSTILE_SECRET: string; BREVO_API_
 
     if (!emailResponse.ok) {
       const errorText = await emailResponse.text();
-      console.error('Brevo error:', emailResponse.status, errorText);
+      console.error('Resend error:', emailResponse.status, errorText);
       return new Response(JSON.stringify({ success: false, error: 'Failed to send email' }), {
         status: 502,
         headers: corsHeaders,
